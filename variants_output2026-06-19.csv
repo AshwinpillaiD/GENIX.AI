@@ -1,0 +1,11 @@
+URL,Gene,Gene Full Name,Variant Type,MANE Select Transcript,My Variant Info ID,ClinVar ID (MyVariant),dbSNP RSID,COSMIC ID,SNPEff Effect,SNPEff Impact,ACMG/AMP BP4,ACMG/AMP PP3,Diseases,Therapies
+https://civicdb.org/variants/1190,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,,
+https://civicdb.org/variants/1191,AKT1,AKT serine/threonine kinase 1,Missense Variant,ENST00000649815.2:c.155T>G,chr14:g.105246445A>C,,rs2140948712,COSM93893,"structural_interaction_variant, missense_variant, sequence_feature","HIGH, MODERATE, LOW",,"Moderate (5), Strong (1), Supporting (7)",Endometrial Cancer,Capivasertib
+https://civicdb.org/variants/1192,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,,
+https://civicdb.org/variants/169,AKT1,AKT serine/threonine kinase 1,Missense Variant,ENST00000649815.2:c.235C>A,chr14:g.105243048G>T,,rs1057519804,COSM159008,"structural_interaction_variant, missense_variant","HIGH, MODERATE",Moderate (1),"Moderate (4), Strong (1), Supporting (7)",Melanoma,"Vemurafenib , Dabrafenib"
+https://civicdb.org/variants/2360,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,Melanoma,Vemurafenib
+https://civicdb.org/variants/237,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,,
+https://civicdb.org/variants/3257,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,Colorectal Cancer,
+https://civicdb.org/variants/4,AKT1,AKT serine/threonine kinase 1,Missense Variant,ENST00000649815.2:c.49G>A,chr14:g.105246551C>T,13983,rs121434592,COSM33765,"missense_variant&splice_region_variant, sequence_feature","MODERATE, LOW","Moderate (1), Supporting (1)","Moderate (4), Strong (1), Supporting (6)","Melanoma , Breast Cancer , Cancer , Her2-receptor Negative…","Capivasertib , Vemurafenib , Akt Inhibitor MK2206 , Fulvestrant , Uprosertib"
+https://civicdb.org/variants/4222,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,Breast Cancer,Capivasertib
+https://civicdb.org/variants/4223,AKT1,AKT serine/threonine kinase 1,,,,,,,,,,,Cancer,"Capivasertib , ARQ092"
