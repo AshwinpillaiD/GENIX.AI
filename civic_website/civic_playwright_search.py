@@ -10,8 +10,9 @@ today = datetime.now().strftime(
     "%Y-%m-%d"
 )
 
-OUTPUT_CSV   = f"variants_output{today}.csv"
-MISSING_CSV  = f"missing_genes{today}.csv"
+os.makedirs("civic_website/Data", exist_ok=True)
+OUTPUT_CSV   = f"Data/variants_output{today}.csv"
+MISSING_CSV  = f"Data/missing_genes{today}.csv"
 # OUTPUT_XLSX  = "variants_output.xlsx"
 # MISSING_XLSX = "missing_genes.xlsx"
 
