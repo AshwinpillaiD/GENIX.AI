@@ -3,7 +3,7 @@ import csv
 import pandas as pd
 from playwright.sync_api import sync_playwright
 from datetime import datetime
-INPUT_FILE   = "Data/gene_panel.xlsx"
+INPUT_FILE   = "Data/25_genes.xlsx"
 SYMBOL_COL   = "Hugo Symbol"
 
 today = datetime.now().strftime(
@@ -58,7 +58,7 @@ def extract_variant_data(page, variant_url, csv_writer, gene_full_name=""):
     try:
         page.wait_for_selector("cvc-feature-tag", timeout=8000)
     except:
-        # print(f"  Invalid page — saving empty row: {variant_url}")
+        print(f"  Invalid page — saving empty row: {variant_url}")
         csv_writer.writerow(data)
         return data
 
@@ -71,7 +71,7 @@ def extract_variant_data(page, variant_url, csv_writer, gene_full_name=""):
     try:
         variant_name = page.locator("#relations-summary span[nz-typography] strong").first.inner_text()
         data["Variant Name"] = clean(variant_name)
-        # print(f"  Variant Name: {data['Variant Name']}")
+        print(f"  Variant Name: {data['Variant Name']}")
     except:
         data["Variant Name"] = ""
         print(f"  Variant Name: not found")
@@ -136,8 +136,8 @@ def extract_variant_data(page, variant_url, csv_writer, gene_full_name=""):
     try:
         acmg_tab = page.locator("button[role='tab']").filter(has_text="OpenCRAVAT ACMG/AMP Classifications")
         acmg_tab.click()
-        page.wait_for_timeout(3000)
-        page.wait_for_selector("cvc-open-cravat-annotations", timeout=10000)
+        page.wait_for_timeout(1000)
+        page.wait_for_selector("cvc-open-cravat-annotations", timeout=1000)
 
         acmg_component = page.locator(
             "cvc-open-cravat-annotations nz-descriptions .ant-descriptions-view table tbody"
@@ -200,7 +200,7 @@ def extract_variant_data(page, variant_url, csv_writer, gene_full_name=""):
 
         overflow_tags  = page.locator("tbody.ant-table-tbody tr.data-row nz-tag.overflow-tag")
         overflow_count = overflow_tags.count()
-        # print(f"  Overflow tags: {overflow_count}")
+        print(f"  Overflow tags: {overflow_count}")
 
         for o in range(overflow_count):
             try:
@@ -240,8 +240,8 @@ def extract_variant_data(page, variant_url, csv_writer, gene_full_name=""):
         data["Diseases"]  = " , ".join(diseases)
         data["Therapies"] = " , ".join(therapies)
 
-        # print(f"  Diseases  ({len(diseases)}): {data['Diseases']}")
-        # print(f"  Therapies ({len(therapies)}): {data['Therapies']}")
+        print(f"  Diseases  ({len(diseases)}): {data['Diseases']}")
+        print(f"  Therapies ({len(therapies)}): {data['Therapies']}")
 
     except Exception as e:
         print(f"  Diseases/Therapies error: {e}")
@@ -281,7 +281,7 @@ def search_gene_exact(page, gene):
                 break
 
         if not matched:
-            # print(f"  No exact match for '{gene}' in dropdown")
+            print(f"  No exact match for '{gene}' in dropdown")
             pd.DataFrame(
                 [{
                     "Gene": gene,
@@ -308,9 +308,9 @@ def search_gene_exact(page, gene):
 
 
 def get_variant_urls_for_gene(page, gene):
-    # print(f"\n{'='*50}")
-    # print(f"Gene: {gene}")
-    # print(f"{'='*50}")
+    print(f"\n{'='*50}")
+    print(f"Gene: {gene}")
+    print(f"{'='*50}")
 
     found = search_gene_exact(page, gene)
     if not found:
@@ -321,7 +321,7 @@ def get_variant_urls_for_gene(page, gene):
         subtitle = page.locator("nz-page-header-subtitle")
         subtitle.wait_for(timeout=5000)
         gene_full_name = clean(subtitle.inner_text())
-        # print(f"  Full name: {gene_full_name}")
+        print(f"  Full name: {gene_full_name}")
     except Exception as e:
         print(f"  Full name not found: {e}")
 
@@ -369,7 +369,7 @@ def get_variant_urls_for_gene(page, gene):
             href = "https://civicdb.org" + href
         variant_urls.add(href)
 
-    # print(f"  Found {len(variant_urls)} variants for '{gene}'")
+    print(f"  Found {len(variant_urls)} variants for '{gene}'")
     return variant_urls, True, gene_full_name
 
 
@@ -381,7 +381,7 @@ if not os.path.exists(INPUT_FILE):
 df_input = pd.read_excel(INPUT_FILE)
 if SYMBOL_COL not in df_input.columns:
     print(f"Column '{SYMBOL_COL}' not found!")
-    # print(f"Available: {df_input.columns.tolist()}")
+    print(f"Available: {df_input.columns.tolist()}")
     exit()
 
 symbols        = df_input[SYMBOL_COL].dropna().astype(str).str.strip().unique().tolist()
@@ -389,8 +389,8 @@ missing_genes  = []
 found_genes    = []
 total_variants = 0
 
-# print(f"{len(symbols)} genes loaded from Excel")
-# print(f"Genes: {symbols}")
+print(f"{len(symbols)} genes loaded from Excel")
+print(f"Genes: {symbols}")
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)
@@ -399,20 +399,20 @@ with sync_playwright() as p:
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as csvfile:
         csv_writer = csv.DictWriter(csvfile, fieldnames=CSV_FIELDS)
         csv_writer.writeheader()
-        # print(f"\nCSV created: {OUTPUT_CSV}")
+        print(f"\nCSV created: {OUTPUT_CSV}")
 
         for gene_idx, gene in enumerate(symbols, 1):
-            # print(f"\n[Gene {gene_idx}/{len(symbols)}] → {gene}")
+            print(f"\n[Gene {gene_idx}/{len(symbols)}] → {gene}")
 
             variant_urls, was_found, gene_full_name = get_variant_urls_for_gene(page, gene)
 
             if not was_found:
                 missing_genes.append(gene)
-                # print(f"  '{gene}' NOT found in CIViC")
+                print(f"  '{gene}' NOT found in CIViC")
                 continue
 
             if not variant_urls:
-                # print(f"  '{gene}' found but no variants")
+                print(f"  '{gene}' found but no variants")
                 found_genes.append(gene)
                 continue
 
@@ -427,7 +427,7 @@ with sync_playwright() as p:
                     print(f"  Error: {e}")
                 csvfile.flush()
 
-    # print(f"\nTotal variants extracted: {total_variants}")
+    print(f"\nTotal variants extracted: {total_variants}")
 
     # ── Save Missing Genes ────────────────────────────────────────
     if missing_genes:
