@@ -2,4 +2,6 @@
 /venv
 missing_genes.csv
 variants_output.csv
-variants_output2026-06-19.csv
+*.csv
+*.xlsx
+*test*
